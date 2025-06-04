@@ -2,6 +2,7 @@ import { useState } from "react";
 import Login from "../src/components/login/login";
 import { Authenticate } from "../src/utilities/fetchRequest";
 import { ValidateEmail, ValidateName } from "../src/utilities/loginUtils";
+import { DogSearch } from "../src/components/search/search";
 
 export default function Root() {
   const [userAuth, setUserAuth] = useState<boolean>();
@@ -27,7 +28,7 @@ export default function Root() {
 
   return (
     <>
-      {userAuth && (<>Dogs go here!</>)}
+      {userAuth && (<DogSearch/>)}
       {!userAuth && (
         <Login
          nameError={nameError}
