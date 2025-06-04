@@ -1,0 +1,8 @@
+{
+  "testEnvironment": "jsdom",
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/.next/"
+  ],
+  "verbose": true
+}
