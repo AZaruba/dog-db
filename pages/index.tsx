@@ -2,7 +2,16 @@ import { useState } from "react";
 import Login from "../src/components/login/login";
 import { Authenticate } from "../src/utilities/fetchRequest";
 import { ValidateEmail, ValidateName } from "../src/utilities/loginUtils";
-import { DogSearch } from "../src/components/search/search";
+import { DogPage } from "../src/components/dogPage/dogPage";
+import { Header } from "../src/components/header/header";
+import { ThemeProvider } from "@emotion/react";
+import { createTheme, CssBaseline } from "@mui/material";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function Root() {
   const [userAuth, setUserAuth] = useState<boolean>();
@@ -28,7 +37,11 @@ export default function Root() {
 
   return (
     <>
-      {userAuth && (<DogSearch/>)}
+
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Header/>
+      {userAuth && (<DogPage/>)}
       {!userAuth && (
         <Login
          nameError={nameError}
@@ -36,6 +49,7 @@ export default function Root() {
          onLoginClicked={onLogin}
         />
       )}
+    </ThemeProvider>
     </>
   );
 }

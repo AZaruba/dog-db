@@ -1,3 +1,4 @@
+import { Dog, IDogTableFilter, IDResponse } from "../constants/types";
 
 const BASE_URL = 'https://frontend-take-home-service.fetch.com';
 const ENDPOINT_AUTH = '/auth/login';
@@ -38,10 +39,70 @@ export async function GetDogBreeds(): Promise<string[] | undefined> {
       method: 'GET'
     }
   ).then((result) => {
-    console.log(result);
+    if (result.status !== 200) {
+      return [];
+    }
     return result.json();
   }).catch((error) => {
     console.log(error);
     return [];
   });
+}
+
+export function ConvertToSearchParams(filter: IDogTableFilter): URLSearchParams {
+  const params: Record<string, string> = {};
+  Object.keys(filter).forEach((field) => {
+    if ((field === 'breeds' ||  field === 'zipCodes') 
+        && filter[field] 
+        && filter[field].length > 0) {
+        
+      params[field] = filter[field].join(',');
+    } else if (filter[field]) {
+      params[field] = filter[field].toString();
+    }
+  });
+
+  return new URLSearchParams(params);
+}
+
+export async function GetDogs(filter: IDogTableFilter): Promise<IDResponse | undefined> {
+
+  return fetch(
+    BASE_URL + ENDPOINT_DOGS_SEARCH + '?' + ConvertToSearchParams(filter).toString(),
+    {
+      credentials: 'include',
+      method: 'GET'
+    }
+  ).then((result) => {
+    if (result.status != 200) {
+      return undefined;
+    }
+    return result.json();
+  }).catch((error) => {
+    console.log(error);
+    return undefined;
+  });
+}
+
+export async function GetDogsFromIds(ids: string[]): Promise<Dog[]> {
+  console.log(JSON.stringify(ids))
+  return fetch(
+    BASE_URL + ENDPOINT_DOGS,
+    {
+      credentials: 'include',
+      headers: {
+          'content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(ids)
+    }
+  ).then((result) => {
+    if (result.status !== 200) {
+      return [];
+    }
+    return result.json();
+  }).catch((error) => {
+    console.log(error);
+    return [];
+  })
 }

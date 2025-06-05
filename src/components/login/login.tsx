@@ -15,6 +15,7 @@ export default function Login(props: ILoginProps) {
     <Container maxWidth='sm'>
       <Stack>
         <TextField
+          data-testid='nameEntry'
           error={props.nameError !== undefined}
           helperText={props.nameError}
           style={{margin: '8px'}}
@@ -27,6 +28,7 @@ export default function Login(props: ILoginProps) {
           variant="outlined"
         />
         <TextField 
+          data-testid='emailEntry'
           error={props.emailError !== undefined}
           helperText={props.emailError}
           style={{margin: '8px'}}
@@ -39,6 +41,7 @@ export default function Login(props: ILoginProps) {
           variant="outlined"
         />
         <Button 
+          data-testid='loginButton'
           variant='outlined'
           onClick={() => {
             props.onLoginClicked(name, email);
