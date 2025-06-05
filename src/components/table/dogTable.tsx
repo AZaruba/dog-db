@@ -5,6 +5,7 @@ import { SortButton } from "../sortButton/sortButton";
 
 export interface IDogTableProps {
   dogs: Dog[];
+  selectedDogs: string[];
   sortConfig?: SortConfig;
   onDogSelected: (id: string, isSelected: boolean) => void;
   onSortClick: (col: string, dir?: SortDir) => void;
@@ -25,8 +26,8 @@ export function DogTable(props: IDogTableProps) {
 
   return (
     <Container maxWidth='lg'>
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }}>
+      <TableContainer sx={{ maxWidth: '80vw', maxHeight: '70vh', overflowY: 'scroll' }}>
+        <Table stickyHeader >
           <TableHead>
             <TableRow >
               <TableCell variant="head" align="left">
@@ -58,9 +59,10 @@ export function DogTable(props: IDogTableProps) {
                 <TableRow>
                   <TableCell align="left">
                     <Checkbox 
-                     key={`select_${dog['id']}`}
+                     key={`select_${dog.id}`}
+                     checked={props.selectedDogs.indexOf(dog.id) > -1}
                      onChange={(e) => {
-                      props.onDogSelected(dog['id'], e.target.checked);
+                      props.onDogSelected(dog.id, e.target.checked);
                     }}/>
                   </TableCell>
                   {
@@ -68,7 +70,7 @@ export function DogTable(props: IDogTableProps) {
                       if (field === 'img') {
                         return ( 
                           <TableCell align="left"
-                            key={`${field}_${dog['id']}`}>
+                            key={`${field}_${dog.id}`}>
                             <img src={dog[field]} height={'100px'} alt={dog['name']}/>
                           </TableCell>
                         )

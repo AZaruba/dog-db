@@ -56,7 +56,7 @@ export function ConvertToSearchParams(filter: IDogTableFilter): URLSearchParams 
         && filter[field] 
         && filter[field].length > 0) {
         
-      params[field] = filter[field].join(',');
+      params[field] = filter[field].toString();
     } else if (filter[field]) {
       params[field] = filter[field].toString();
     }
@@ -103,5 +103,30 @@ export async function GetDogsFromIds(ids: string[]): Promise<Dog[]> {
   }).catch((error) => {
     console.log(error);
     return [];
+  });
+}
+
+export async function GetMatch(ids: string[]): Promise<string> {
+  console.log(ids);
+  return fetch(
+    BASE_URL + ENDPOINT_DOGS_MATCH,
+    {
+      credentials: 'include',
+      headers: {
+          'content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(ids)
+    }
+  ).then((result) => {
+    if (result.status !== 200) {
+      return '';
+    }
+    return result.json().then((json) => {
+      return json.match;
+    });
+  }).catch((error) => {
+    console.log(error);
+    return '';
   })
 }

@@ -5,7 +5,7 @@ import { ValidateEmail, ValidateName } from "../src/utilities/loginUtils";
 import { DogPage } from "../src/components/dogPage/dogPage";
 import { Header } from "../src/components/header/header";
 import { ThemeProvider } from "@emotion/react";
-import { createTheme, CssBaseline } from "@mui/material";
+import { createTheme, CssBaseline, Stack } from "@mui/material";
 
 const darkTheme = createTheme({
   palette: {
@@ -40,15 +40,19 @@ export default function Root() {
 
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Header/>
-      {userAuth && (<DogPage/>)}
-      {!userAuth && (
-        <Login
-         nameError={nameError}
-         emailError={emailError}
-         onLoginClicked={onLogin}
-        />
-      )}
+      <Stack direction='column'>
+        <Header
+         userAuthed={userAuth}
+         onLogout={onLogout}/>
+        {userAuth && (<DogPage/>)}
+        {!userAuth && (
+          <Login
+          nameError={nameError}
+          emailError={emailError}
+          onLoginClicked={onLogin}
+          />
+        )}
+      </Stack>
     </ThemeProvider>
     </>
   );

@@ -9,8 +9,10 @@ NOTE: Safari users will have to disable the "Prevent Cross-Site Tracking" settin
 ## Running Locally
 
 Run `npm i -D` to install packages.
-Run `npm run dev` to run the app locally
-Open a browser and navigate to `localhost:3000`
+
+Run `npm run dev` to run the app locally.
+
+Open a browser and navigate to `localhost:3000`.
 
 ## Running Tests
 To run unit tests, after installing packages run `npm test`.

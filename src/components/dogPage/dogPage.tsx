@@ -3,20 +3,26 @@ import { DogTable } from "../table/dogTable";
 import { DogSearch } from "../search/search";
 import { GetDogs, GetDogsFromIds } from "../../utilities/fetchRequest";
 import { Dog, SortConfig, SortDir } from "../../constants/types";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import { PaginationControls } from "../paginationControls/paginationControls";
+import { MatchButton } from "../matchButton/matchButton";
+import { MatchResult } from "../matchResults/matchResults";
 
 export function DogPage() {
-  const [queryCursor, setQueryCursor] = useState<string>();
+  const [queryCursor, setQueryCursor] = useState<number>(0);
+  const [totalDogs, setTotalDogs] = useState<number>(0);
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedDogs, setSelectedDogs] = useState<string[]>([]);
   const [sortConfig, setSortConfig] = useState<SortConfig>();
+  const [matchDog, setMatchDog] = useState<Dog>();
 
   function onDogSearch(
     breedList: string[], 
     ageMin: number | null, 
     ageMax: number | null, 
-    zipCodes?: string[]
+    zipCodes?: string[],
+    resetCursor?: boolean
   ) {
     setIsLoading(true);
     let sortString: string | undefined;
@@ -25,15 +31,22 @@ export function DogPage() {
       sortString = `${sortConfig.column}:${sortConfig.dir}`;
     }
 
+    let from = queryCursor;
+    if (resetCursor) {
+      from = 0;
+      setQueryCursor(0);
+    }
+
     GetDogs({
       breeds: breedList,
       ageMax: ageMax,
       ageMin: ageMin,
       zipCodes: zipCodes,
       sort: sortString,
-      from: queryCursor
+      from: from
     }).then((result) => {
       if (result && result.resultIds) {
+        setTotalDogs(result.total);
         GetDogsFromIds(result.resultIds).then((result) => {
           setDogs(result);
           setIsLoading(false);
@@ -41,6 +54,7 @@ export function DogPage() {
       }
     });
   }
+  console.log(selectedDogs);
 
   function onDogSelected(id: string, isSelected: boolean) {
     const newSelectedDogs = [...selectedDogs];
@@ -53,6 +67,7 @@ export function DogPage() {
   }
 
   function onSortClick(col: string, dir?: SortDir) {
+    setQueryCursor(0);
     if (dir) {
       setSortConfig({
         column: col,
@@ -65,7 +80,17 @@ export function DogPage() {
   
   return (
   <>
-    <DogSearch isLoading={isLoading} sortConfig={sortConfig} onDogSearch={onDogSearch}/>
+      <Box
+       padding='16px'
+       display="flex"
+       justifyContent="start"
+       flexDirection={'column'}
+       alignItems="center"
+       height={'75vh'}
+      >
+    { !matchDog && 
+    <>
+    <DogSearch isLoading={isLoading} sortConfig={sortConfig} queryCursor={queryCursor} onDogSearch={onDogSearch}/>
     {
       isLoading && 
       <Box
@@ -73,18 +98,43 @@ export function DogPage() {
        display="flex"
        justifyContent="center"
        alignItems="center"
+       height={'70vh'}
       >
         <div>Loading Dogs...</div>
       </Box>
     }
-    {
-      !isLoading && 
-      <DogTable 
-       dogs={dogs} 
-       sortConfig={sortConfig}
-       onDogSelected={onDogSelected}
-       onSortClick={onSortClick}
-      />
+    </>
     }
+    { !matchDog && 
+    <>
+      {
+        !isLoading &&
+          <DogTable 
+          dogs={dogs} 
+          sortConfig={sortConfig}
+          selectedDogs={selectedDogs}
+          onDogSelected={onDogSelected}
+          onSortClick={onSortClick}
+          />
+      }
+      <PaginationControls 
+        totalRows={totalDogs} 
+        page={Math.floor(queryCursor/ 25)} 
+        pageSize={25}
+        onPageChange={(offset) => {
+          setQueryCursor(offset)
+        }}
+      />
+      <MatchButton dogIds={selectedDogs} onClick={function (id: string): void {
+        setMatchDog(dogs.filter((dog) => dog.id = id)[0]);
+      } }/>
+    </>
+    }
+    { matchDog &&
+      <MatchResult dog={matchDog} onStartOver={() => {
+        setMatchDog(undefined);
+        setSelectedDogs([]);
+      }}/>}
+    </Box>
   </>);
 }

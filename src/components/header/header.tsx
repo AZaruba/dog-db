@@ -1,10 +1,16 @@
-import { Container, Stack } from "@mui/material";
+import { Button, Container, Stack } from "@mui/material";
 
-export function Header() {
+export interface IHeaderProps {
+  userAuthed: boolean | undefined;
+  onLogout: () => void;
+}
+
+export function Header(props: IHeaderProps) {
   return(
     <Container maxWidth='xl'>
       <Stack direction='row' justifyContent={'space-around'} padding={'16px'}>
         Andrew's Cool Dog Zone - Do Not Tell Casey Or He Will Be Jealous
+      {props.userAuthed && <Button onClick={props.onLogout}>Logout</Button>}
       </Stack>
     </Container>
   )

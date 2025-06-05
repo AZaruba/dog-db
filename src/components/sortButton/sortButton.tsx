@@ -12,11 +12,11 @@ export interface ISortButtonProps {
 
 export function SortButton(props: ISortButtonProps) {
   return (
-  <IconButton size={'small'} onClick={props.onClick}>
+  <IconButton data-testid={`sort_${props.column}`}size={'small'} onClick={props.onClick}>
     {props.sortConfig && props.sortConfig.column === props.column ? 
       (props.sortConfig.dir === 'asc' ? 
-        <KeyboardArrowUpIcon/> : 
-        <KeyboardArrowDownIcon/>) :
-      <UnfoldMoreIcon/>}
+        <KeyboardArrowUpIcon data-testid='sort-up'/> : 
+        <KeyboardArrowDownIcon data-testid='sort-down '/>) :
+      <UnfoldMoreIcon data-testid='sort-none'/>}
   </IconButton>);
 }

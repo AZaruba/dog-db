@@ -5,7 +5,7 @@ export interface IDogTableFilter {
   zipCodes?: string[];
   size?: number;
   sort?: string;
-  from?: string;
+  from?: number;
 }
 
 export type SortDir = 'asc' | 'desc'
@@ -18,6 +18,7 @@ export interface SortConfig {
 export interface IDResponse {
   resultIds: string[];
   next: string;
+  total: number;
 }
 
 export interface Dog {

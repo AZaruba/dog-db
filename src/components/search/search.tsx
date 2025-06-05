@@ -6,7 +6,8 @@ import { SortConfig } from "../../constants/types";
 export interface IDogSearchProps {
   isLoading: boolean;
   sortConfig?: SortConfig;
-  onDogSearch: (breedList: string[], ageMin: number | null, ageMax: number | null, zipCodes?: string[]) => void;
+  queryCursor: number;
+  onDogSearch: (breedList: string[], ageMin: number | null, ageMax: number | null, zipCodes?: string[], resetCursor?: boolean) => void;
 }
 
 export function DogSearch(props: IDogSearchProps) {
@@ -35,7 +36,7 @@ export function DogSearch(props: IDogSearchProps) {
       ageMax,
       zipCodes
     );
-  }, [props.sortConfig])
+  }, [props.sortConfig, props.queryCursor])
 
   return (
     <Container maxWidth='md'>
@@ -46,7 +47,7 @@ export function DogSearch(props: IDogSearchProps) {
           <Select multiple
             disabled={props.isLoading}
             size='small'
-            style={{minWidth: 400, maxWidth: 400}}
+            style={{minWidth: '20vw', maxWidth: '20vw'}}
             labelId="breed-select-label"
             id="breed-select"
             value={selectedBreeds}
@@ -63,7 +64,7 @@ export function DogSearch(props: IDogSearchProps) {
         </Stack>
         }
 
-        <Stack direction='column'>
+        <Stack direction='column' >
           <InputLabel id="min-age-label">Min Age</InputLabel>
           <TextField
           disabled={props.isLoading}
@@ -103,7 +104,8 @@ export function DogSearch(props: IDogSearchProps) {
             selectedBreeds,
             ageMin,
             ageMax,
-            zipCodes
+            zipCodes,
+            true
            );
          }}
         >
