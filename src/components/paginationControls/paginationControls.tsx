@@ -8,7 +8,7 @@ export interface IPaginationControlsProps {
 }
 
 export function PaginationControls(props: IPaginationControlsProps) {
-  const pageCount = Math.floor(props.totalRows / props.pageSize);
+  const pageCount = Math.ceil(props.totalRows / props.pageSize);
 
   return (
   <Stack direction={'row'} justifyContent={'end'} padding='16px' width={'80vw'}>
