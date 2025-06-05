@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { Dog, DogFields, SortConfig, SortDir } from "../../constants/types";
-import { Checkbox, Container, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Dog, DogFields, FieldSort, SortConfig, SortDir } from "../../constants/types";
+import { Box, Checkbox, Container, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { SortButton } from "../sortButton/sortButton";
 
 export interface IDogTableProps {
@@ -25,26 +25,34 @@ export function DogTable(props: IDogTableProps) {
   }
 
   return (
-    <Container maxWidth='lg'>
-      <TableContainer sx={{ maxWidth: '80vw', maxHeight: '70vh', overflowY: 'scroll' }}>
+    <Box
+      padding='16px'
+      display="flex"
+      justifyContent="start"
+      flexDirection={'column'}
+      alignItems="center"
+      width={'80vw'}
+    >
+      <TableContainer sx={{ maxWidth: '100%', maxHeight: '60vh', overflowY: 'scroll' }}>
         <Table stickyHeader >
           <TableHead>
-            <TableRow >
+            <TableRow key='dog-table-head'>
               <TableCell variant="head" align="left">
                 Selected
               </TableCell>
               {
                 Object.keys(DogFields).map((field) => {
-                  // TODO: Add Sorting buttons here
                   return (
-                  <TableCell variant='head' align="left">
+                  <TableCell variant='head' align="left" key={`tableHead_${field}`}>
                     <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
                       {DogFields[field]}
+                      {FieldSort[field] && 
                       <SortButton 
+                        key={`sortButton_${field}`}
                         column={field}
                         sortConfig={props.sortConfig}
                         onClick={() => onSortClick(field)}
-                      />
+                      />}
                     </Stack>
                   </TableCell>
                   )
@@ -56,7 +64,8 @@ export function DogTable(props: IDogTableProps) {
             {
               props.dogs.map((dog) => {
                 return (
-                <TableRow>
+                <TableRow
+                  key={`dogRow_${dog.id}`}>
                   <TableCell align="left">
                     <Checkbox 
                      key={`select_${dog.id}`}
@@ -75,7 +84,7 @@ export function DogTable(props: IDogTableProps) {
                           </TableCell>
                         )
                       }
-                      return <TableCell align="left">{dog[field]}</TableCell>
+                      return <TableCell align="left" key={`${field}_${dog.id}`}>{dog[field]}</TableCell>
                     })
                   }
                 </TableRow>
@@ -85,6 +94,6 @@ export function DogTable(props: IDogTableProps) {
           </TableBody>
         </Table>
       </TableContainer>
-    </Container>
+    </Box>
   )
 }

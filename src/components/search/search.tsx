@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetDogBreeds } from "../../utilities/fetchRequest";
-import { Button, Container, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Box, Button, Container, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { SortConfig } from "../../constants/types";
 
 export interface IDogSearchProps {
@@ -14,7 +14,7 @@ export function DogSearch(props: IDogSearchProps) {
   const [breedList, setBreedList] = useState<string[]>();
   const [selectedBreeds, setSelectedBreeds] = useState<string[]>([]);
   const [ageMin, setageMin] = useState<number | null>(0);
-  const [ageMax, setageMax] = useState<number | null>(100);
+  const [ageMax, setageMax] = useState<number | null>(0);
   const [zipCodes, setZipCodes] = useState<string[]>();
 
   useEffect(() => {
@@ -39,7 +39,14 @@ export function DogSearch(props: IDogSearchProps) {
   }, [props.sortConfig, props.queryCursor])
 
   return (
-    <Container maxWidth='md'>
+    <Box
+      padding='16px'
+      display="flex"
+      justifyContent="start"
+      flexDirection={'column'}
+      alignItems="center"
+      width={'80vw'}
+    >
     <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'center'}>
         {breedList && breedList.length > 0 &&
         <Stack direction='column'>
@@ -74,7 +81,8 @@ export function DogSearch(props: IDogSearchProps) {
           id="min-age"
           value={ageMin}
           onChange={(e) => {
-            setageMin(e.target.value as unknown as number);
+            const floor = Math.max(0, e.target.value as unknown as number);
+            setageMin(floor);
           }}
           >
           </TextField>
@@ -89,7 +97,8 @@ export function DogSearch(props: IDogSearchProps) {
           id="max-age"
           value={ageMax}
           onChange={(e) => {
-            setageMax(e.target.value as unknown as number);
+            const floor = Math.max(0, e.target.value as unknown as number);
+            setageMax(floor);
           }}
           >
           </TextField>
@@ -112,6 +121,6 @@ export function DogSearch(props: IDogSearchProps) {
           Search
         </Button>
     </Stack>
-    </Container>
+    </Box>
   )
 }

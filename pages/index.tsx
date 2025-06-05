@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Login from "../src/components/login/login";
-import { Authenticate } from "../src/utilities/fetchRequest";
+import { Authenticate, Logout } from "../src/utilities/fetchRequest";
 import { ValidateEmail, ValidateName } from "../src/utilities/loginUtils";
 import { DogPage } from "../src/components/dogPage/dogPage";
 import { Header } from "../src/components/header/header";
@@ -33,6 +33,7 @@ export default function Root() {
 
   function onLogout() {
     setUserAuth(false);
+    Logout();
   }
 
   return (

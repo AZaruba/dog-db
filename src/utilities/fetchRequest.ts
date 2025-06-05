@@ -2,12 +2,13 @@ import { Dog, IDogTableFilter, IDResponse } from "../constants/types";
 
 const BASE_URL = 'https://frontend-take-home-service.fetch.com';
 const ENDPOINT_AUTH = '/auth/login';
+const ENDPOINT_AUTH_LOGOUT = '/auth/logout';
 const ENDPOINT_DOGS = '/dogs';
 const ENDPOINT_DOGS_BREEDS = '/dogs/breeds';
 const ENDPOINT_DOGS_MATCH = '/dogs/match';
 const ENDPOINT_DOGS_SEARCH = '/dogs/search';
-const ENDPOINT_LOCATIONS = '/locations';
-const ENDPOINT_LOCATIONS_SEARCH = '/locations/search'
+// const ENDPOINT_LOCATIONS = '/locations';
+// const ENDPOINT_LOCATIONS_SEARCH = '/locations/search'
 
 export async function Authenticate(name: string, email: string): Promise<boolean> {
   return fetch(
@@ -31,6 +32,21 @@ export async function Authenticate(name: string, email: string): Promise<boolean
   });
 }
 
+export async function Logout(): Promise<undefined> {
+  return fetch(
+    BASE_URL + ENDPOINT_AUTH_LOGOUT,
+    {
+      credentials: 'include',
+      method: 'POST'
+    }
+  ).then(() => {
+    return undefined;
+  }).catch((error) => {
+    console.log(error);
+    return undefined;
+  });
+}
+
 export async function GetDogBreeds(): Promise<string[] | undefined> {
   return fetch(
     BASE_URL + ENDPOINT_DOGS_BREEDS,
@@ -50,19 +66,20 @@ export async function GetDogBreeds(): Promise<string[] | undefined> {
 }
 
 export function ConvertToSearchParams(filter: IDogTableFilter): URLSearchParams {
-  const params: Record<string, string> = {};
+  const params = new URLSearchParams();
   Object.keys(filter).forEach((field) => {
-    if ((field === 'breeds' ||  field === 'zipCodes') 
-        && filter[field] 
-        && filter[field].length > 0) {
-        
-      params[field] = filter[field].toString();
+    if ((field === 'breeds' || field === 'zipCodes')) {
+      if(filter[field] && filter[field].length > 0) {
+        filter[field].forEach((fieldValue) => {
+          params.append(field, fieldValue);
+        })
+      }
     } else if (filter[field]) {
-      params[field] = filter[field].toString();
+      params.append(field, filter[field].toString());
     }
   });
 
-  return new URLSearchParams(params);
+  return params
 }
 
 export async function GetDogs(filter: IDogTableFilter): Promise<IDResponse | undefined> {
@@ -107,7 +124,7 @@ export async function GetDogsFromIds(ids: string[]): Promise<Dog[]> {
 }
 
 export async function GetMatch(ids: string[]): Promise<string> {
-  console.log(ids);
+
   return fetch(
     BASE_URL + ENDPOINT_DOGS_MATCH,
     {

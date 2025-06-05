@@ -1,4 +1,4 @@
-import { Button, Container, Stack, TextField } from "@mui/material";
+import { Box, Button, Container, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 
 export interface ILoginProps {
@@ -12,8 +12,15 @@ export default function Login(props: ILoginProps) {
   const [email, setEmail] = useState<string>('');
 
   return (
-    <Container maxWidth='sm'>
-      <Stack>
+    <Box
+      padding='16px'
+      display="flex"
+      justifyContent="start"
+      flexDirection={'column'}
+      alignItems="center"
+      height={'75vh'}
+    >
+      <Stack justifyContent={'center'}>
         <TextField
           data-testid='nameEntry'
           error={props.nameError !== undefined}
@@ -43,6 +50,10 @@ export default function Login(props: ILoginProps) {
         <Button 
           data-testid='loginButton'
           variant='outlined'
+          style={{
+            width: '280px',
+            margin: '16px'
+          }}
           onClick={() => {
             props.onLoginClicked(name, email);
           }}
@@ -50,6 +61,6 @@ export default function Login(props: ILoginProps) {
           Login!
         </Button>
       </Stack>
-    </Container>
+    </Box>
   );
 }

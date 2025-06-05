@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DogTable } from "../table/dogTable";
 import { DogSearch } from "../search/search";
 import { GetDogs, GetDogsFromIds } from "../../utilities/fetchRequest";
-import { Dog, SortConfig, SortDir } from "../../constants/types";
+import { DefaultSortConfig, Dog, SortConfig, SortDir } from "../../constants/types";
 import { Box, Stack } from "@mui/material";
 import { PaginationControls } from "../paginationControls/paginationControls";
 import { MatchButton } from "../matchButton/matchButton";
@@ -14,7 +14,7 @@ export function DogPage() {
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedDogs, setSelectedDogs] = useState<string[]>([]);
-  const [sortConfig, setSortConfig] = useState<SortConfig>();
+  const [sortConfig, setSortConfig] = useState<SortConfig>(DefaultSortConfig);
   const [matchDog, setMatchDog] = useState<Dog>();
 
   function onDogSearch(
@@ -35,6 +35,7 @@ export function DogPage() {
     if (resetCursor) {
       from = 0;
       setQueryCursor(0);
+      setSelectedDogs([]);
     }
 
     GetDogs({
@@ -54,7 +55,6 @@ export function DogPage() {
       }
     });
   }
-  console.log(selectedDogs);
 
   function onDogSelected(id: string, isSelected: boolean) {
     const newSelectedDogs = [...selectedDogs];
@@ -74,22 +74,23 @@ export function DogPage() {
         dir: dir
       });
     } else {
-      setSortConfig(undefined);
+      setSortConfig(DefaultSortConfig);
     }
   }
   
   return (
   <>
-      <Box
-       padding='16px'
-       display="flex"
-       justifyContent="start"
-       flexDirection={'column'}
-       alignItems="center"
-       height={'75vh'}
-      >
+    <Box
+      padding='16px'
+      display="flex"
+      justifyContent="start"
+      flexDirection={'column'}
+      alignItems="center"
+      height={'75vh'}
+    >
     { !matchDog && 
     <>
+    <Stack width={'90vh'}>To look for a match, pick out your desired breeds and age range, then click the checkbox on the right for each dog you'd like to be matched with. Hit match and we'll give you the perfect match!</Stack>
     <DogSearch isLoading={isLoading} sortConfig={sortConfig} queryCursor={queryCursor} onDogSearch={onDogSearch}/>
     {
       isLoading && 

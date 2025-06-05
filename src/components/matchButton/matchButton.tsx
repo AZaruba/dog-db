@@ -7,6 +7,7 @@ export interface IMatchButtonProps {
 }
 export function MatchButton(props: IMatchButtonProps) {
   return (<Button
+   data-testid='match-button'
    disabled={props.dogIds.length === 0}
    style={{width: '200px'}}
    onClick={() => {

@@ -15,6 +15,20 @@ export interface SortConfig {
   dir: SortDir;
 }
 
+export const DefaultSortConfig: SortConfig = {
+  column: 'breed',
+  dir: 'asc'
+}
+
+export const FieldSort: Record<string, boolean> = {
+  'img': false,
+  'name': true,
+  'age': true,
+  "zip_code": false,
+  "breed": true
+
+}
+
 export interface IDResponse {
   resultIds: string[];
   next: string;
