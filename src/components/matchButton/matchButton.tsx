@@ -10,6 +10,7 @@ export function MatchButton(props: IMatchButtonProps) {
    data-testid='match-button'
    disabled={props.dogIds.length === 0}
    style={{width: '200px'}}
+   variant='outlined'
    onClick={() => {
     console.log(props.dogIds);
     GetMatch(props.dogIds).then((matchId) => {
