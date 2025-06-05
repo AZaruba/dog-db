@@ -12,7 +12,6 @@ export function MatchButton(props: IMatchButtonProps) {
    style={{width: '200px'}}
    variant='outlined'
    onClick={() => {
-    console.log(props.dogIds);
     GetMatch(props.dogIds).then((matchId) => {
       props.onClick(matchId);
     });

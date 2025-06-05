@@ -77,8 +77,6 @@ export function DogPage() {
       setSortConfig(DefaultSortConfig);
     }
   }
-
-  console.log(totalDogs);
   
   return (
   <>

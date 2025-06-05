@@ -16,6 +16,18 @@ export function DogSearch(props: IDogSearchProps) {
   const [ageMin, setageMin] = useState<number | null>(0);
   const [ageMax, setageMax] = useState<number | null>(0);
   const [zipCodes, setZipCodes] = useState<string[]>();
+  const [zipCodeError, setZipCodeError] = useState<string>();
+
+  function onSetZipCode(code: string) {
+    const match = /^\d{5,5}$/.exec(code);
+    console.log(match);
+    if (match === null) {
+      setZipCodeError('Invalid zip code');
+    } else {
+      setZipCodeError(undefined);
+      setZipCodes([code]);
+    }
+  }
 
   useEffect(() => {
     if (breedList) {
@@ -47,7 +59,7 @@ export function DogSearch(props: IDogSearchProps) {
       alignItems="center"
       width={'80vw'}
     >
-    <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'center'}>
+    <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'start'}>
         {breedList && breedList.length > 0 &&
         <Stack direction='column'>
           <InputLabel id="breed-select-label">Breed</InputLabel>
@@ -102,6 +114,25 @@ export function DogSearch(props: IDogSearchProps) {
           }}
           >
           </TextField>
+        </Stack>
+        <Stack direction='column'>
+          <InputLabel id="zip-code-label">Zip Code</InputLabel>
+            <TextField
+            error={zipCodeError !== undefined}
+            helperText={zipCodeError}
+            disabled={props.isLoading}
+            style={{width: '150px', height: 40, overflowY: 'visible'}}
+            size='small'
+            id="zip-code"
+            onChange={(e) => {
+              if (e.target.value.length > 0) {
+                onSetZipCode(e.target.value);
+              } else {
+                setZipCodes(undefined);
+              }
+            }}
+            >
+            </TextField>
         </Stack>
         <Button
          loading={props.isLoading}
