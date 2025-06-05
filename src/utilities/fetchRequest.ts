@@ -85,7 +85,6 @@ export async function GetDogs(filter: IDogTableFilter): Promise<IDResponse | und
 }
 
 export async function GetDogsFromIds(ids: string[]): Promise<Dog[]> {
-  console.log(JSON.stringify(ids))
   return fetch(
     BASE_URL + ENDPOINT_DOGS,
     {

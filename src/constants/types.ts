@@ -10,6 +10,11 @@ export interface IDogTableFilter {
 
 export type SortDir = 'asc' | 'desc'
 
+export interface SortConfig {
+  column: string;
+  dir: SortDir;
+}
+
 export interface IDResponse {
   resultIds: string[];
   next: string;

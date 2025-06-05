@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { GetDogBreeds } from "../../utilities/fetchRequest";
 import { Button, Container, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { SortConfig } from "../../constants/types";
 
 export interface IDogSearchProps {
+  isLoading: boolean;
+  sortConfig?: SortConfig;
   onDogSearch: (breedList: string[], ageMin: number | null, ageMax: number | null, zipCodes?: string[]) => void;
 }
 
@@ -25,6 +28,15 @@ export function DogSearch(props: IDogSearchProps) {
     });
   });
 
+  useEffect(() => {
+    props.onDogSearch(
+      selectedBreeds,
+      ageMin,
+      ageMax,
+      zipCodes
+    );
+  }, [props.sortConfig])
+
   return (
     <Container maxWidth='md'>
     <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'center'}>
@@ -32,6 +44,7 @@ export function DogSearch(props: IDogSearchProps) {
         <Stack direction='column'>
           <InputLabel id="breed-select-label">Breed</InputLabel>
           <Select multiple
+            disabled={props.isLoading}
             size='small'
             style={{minWidth: 400, maxWidth: 400}}
             labelId="breed-select-label"
@@ -53,6 +66,7 @@ export function DogSearch(props: IDogSearchProps) {
         <Stack direction='column'>
           <InputLabel id="min-age-label">Min Age</InputLabel>
           <TextField
+          disabled={props.isLoading}
           style={{width: '100px'}}
           size='small'
           type='number'
@@ -67,6 +81,7 @@ export function DogSearch(props: IDogSearchProps) {
         <Stack direction='column'>
           <InputLabel id="max-age-label">Max Age</InputLabel>
           <TextField
+          disabled={props.isLoading}
           style={{width: '100px'}}
           size='small'
           type='number'
@@ -79,6 +94,7 @@ export function DogSearch(props: IDogSearchProps) {
           </TextField>
         </Stack>
         <Button
+         loading={props.isLoading}
          style={{minWidth: 100, height: 40, alignSelf: 'end'}}
          data-testid='searchButton'
          variant='outlined'
