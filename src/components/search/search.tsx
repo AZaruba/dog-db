@@ -20,7 +20,6 @@ export function DogSearch(props: IDogSearchProps) {
 
   function onSetZipCode(code: string) {
     const match = /^\d{5,5}$/.exec(code);
-    console.log(match);
     if (match === null) {
       setZipCodeError('Invalid zip code');
     } else {
@@ -58,8 +57,9 @@ export function DogSearch(props: IDogSearchProps) {
       flexDirection={'column'}
       alignItems="center"
       width={'80vw'}
+      flexWrap={'wrap'}
     >
-    <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'start'}>
+    <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'start'} flexWrap={'wrap'}>
         {breedList && breedList.length > 0 &&
         <Stack direction='column'>
           <InputLabel id="breed-select-label">Breed</InputLabel>

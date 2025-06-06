@@ -90,7 +90,7 @@ export function DogPage() {
     >
     { !matchDog && 
     <>
-    <Stack width={'90vh'}>To look for a match, pick out your desired breeds and age range, then click the checkbox on the right for each dog you'd like to be matched with. Hit the match button and we'll give you the perfect match!</Stack>
+    <Stack maxWidth={'90vh'} flexWrap={'wrap'}>To look for a match, pick out your desired breeds and age range, then click the checkbox on the right for each dog you'd like to be matched with. Hit the match button and we'll give you the perfect match!</Stack>
     <DogSearch isLoading={isLoading} sortConfig={sortConfig} queryCursor={queryCursor} onDogSearch={onDogSearch}/>
     {
       isLoading && 
