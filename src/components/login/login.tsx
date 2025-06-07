@@ -21,6 +21,11 @@ export default function Login(props: ILoginProps) {
     flexDirection={'column'}
     alignItems='center'
     alignSelf={'center'}
+    onKeyDown={(e) => {
+      if (e.key === "Enter") {
+        props.onLoginClicked(name, email);
+      }
+    }}
     >
       <Box
         padding='16px'
