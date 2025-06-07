@@ -1,14 +1,21 @@
-import { useState } from "react";
-import { DogTable } from "../table/dogTable";
+import { useEffect, useState } from "react";
 import { DogSearch } from "../search/search";
 import { GetDogs, GetDogsFromIds } from "../../utilities/fetchRequest";
 import { DefaultSortConfig, Dog, SortConfig, SortDir } from "../../constants/types";
-import { Box, Stack } from "@mui/material";
-import { PaginationControls } from "../paginationControls/paginationControls";
-import { MatchButton } from "../matchButton/matchButton";
+import { Box } from "@mui/material";
+import { IPaginationControlsProps } from "../paginationControls/paginationControls";
+import { IMatchButtonProps } from "../matchButton/matchButton";
 import { MatchResult } from "../matchResults/matchResults";
+import { DogTableContainer } from "../table/dogTableContainer";
+import { IDogTableProps } from "../table/dogTable2";
+import { SortBar } from "../sortBar/sortBar";
 
-export function DogPage() {
+export interface IDogPageProps {
+  isAuthed?: boolean;
+  onAuthCheck: (code: number) => void;
+}
+
+export function DogPage(props: IDogPageProps) {
   const [queryCursor, setQueryCursor] = useState<number>(0);
   const [totalDogs, setTotalDogs] = useState<number>(0);
   const [dogs, setDogs] = useState<Dog[]>([]);
@@ -16,6 +23,28 @@ export function DogPage() {
   const [selectedDogs, setSelectedDogs] = useState<string[]>([]);
   const [sortConfig, setSortConfig] = useState<SortConfig>(DefaultSortConfig);
   const [matchDog, setMatchDog] = useState<Dog>();
+
+  useEffect(() => {
+     GetDogs({
+      breeds: [],
+      ageMax: null,
+      ageMin: null,
+    }).then((result) => {
+      if (result && result.code === 401) {
+        props.onAuthCheck(result.code);
+        setIsLoading(false);
+      } else if (result && result.resultIds) {
+        props.onAuthCheck(result.code);
+        setTotalDogs(result.total);
+        GetDogsFromIds(result.resultIds).then((result) => {
+          setDogs(result);
+          setIsLoading(false);
+        });
+      } else {
+        setIsLoading(false);
+      }
+    });
+  }, []);
 
   function onDogSearch(
     breedList: string[], 
@@ -46,12 +75,18 @@ export function DogPage() {
       sort: sortString,
       from: from
     }).then((result) => {
-      if (result && result.resultIds) {
+      if (result && result.code === 401) {
+        props.onAuthCheck(result.code);
+        setIsLoading(false);
+      } else if (result && result.resultIds) {
+        props.onAuthCheck(result.code);
         setTotalDogs(result.total);
         GetDogsFromIds(result.resultIds).then((result) => {
           setDogs(result);
           setIsLoading(false);
-        })
+        });
+      } else {
+        setIsLoading(false);
       }
     });
   }
@@ -66,20 +101,41 @@ export function DogPage() {
     setSelectedDogs(newSelectedDogs);
   }
 
-  function onSortClick(col: string, dir?: SortDir) {
+  function onSortUpdate(col: string, dir: SortDir) {
     setQueryCursor(0);
-    if (dir) {
-      setSortConfig({
-        column: col,
-        dir: dir
-      });
-    } else {
-      setSortConfig(DefaultSortConfig);
+    setSortConfig({
+      column: col,
+      dir: dir
+    });
+  }
+  
+  const tableProps: IDogTableProps = {
+    dogs: dogs,
+    selectedDogs: selectedDogs,
+    onDogSelected: onDogSelected
+  }
+
+  const paginationProps: IPaginationControlsProps = {
+    totalRows: totalDogs,
+    page: Math.floor(queryCursor / 25),
+    pageSize: 25,
+    onPageChange: function (offset: number): void {
+      setQueryCursor(offset);
+    }
+  }
+
+  console.log(selectedDogs);
+  const matchProps: IMatchButtonProps = {
+    dogIds: selectedDogs,
+    onClick: function (id: string): void {
+      setMatchDog(dogs.filter((dog) => dog.id === id)[0]);
     }
   }
   
   return (
   <>
+   {
+    props.isAuthed &&
     <Box
       padding='16px'
       display="flex"
@@ -90,46 +146,24 @@ export function DogPage() {
     >
     { !matchDog && 
     <>
-    <Stack maxWidth={'90vh'} flexWrap={'wrap'}>To look for a match, pick out your desired breeds and age range, then click the checkbox on the right for each dog you'd like to be matched with. Hit the match button and we'll give you the perfect match!</Stack>
-    <DogSearch isLoading={isLoading} sortConfig={sortConfig} queryCursor={queryCursor} onDogSearch={onDogSearch}/>
-    {
-      isLoading && 
-      <Box
-       padding='16px'
-       display="flex"
-       justifyContent="center"
-       alignItems="center"
-       height={'70vh'}
-      >
-        <div>Loading Dogs...</div>
-      </Box>
-    }
+      <DogSearch 
+      isLoading={isLoading} 
+      sortConfig={sortConfig} 
+      queryCursor={queryCursor} 
+      onDogSearch={onDogSearch}
+      onViewSelected={() => {}}
+      />
+      <SortBar onUpdateSort={onSortUpdate}/>
     </>
     }
     { !matchDog && 
-    <>
-      {
-        !isLoading &&
-          <DogTable 
-          dogs={dogs} 
-          sortConfig={sortConfig}
-          selectedDogs={selectedDogs}
-          onDogSelected={onDogSelected}
-          onSortClick={onSortClick}
-          />
-      }
-      <PaginationControls 
-        totalRows={totalDogs} 
-        page={Math.floor(queryCursor/ 25)} 
-        pageSize={25}
-        onPageChange={(offset) => {
-          setQueryCursor(offset)
-        }}
+      <DogTableContainer 
+        isLoading={isLoading} 
+        tableProps={tableProps} 
+        paginationProps={paginationProps} 
+        matchButtonProps={matchProps}
+        onSortUpdate={onSortUpdate}
       />
-      <MatchButton dogIds={selectedDogs} onClick={function (id: string): void {
-        setMatchDog(dogs.filter((dog) => dog.id = id)[0]);
-      } }/>
-    </>
     }
     { matchDog &&
       <MatchResult dog={matchDog} onStartOver={() => {
@@ -137,5 +171,6 @@ export function DogPage() {
         setSelectedDogs([]);
       }}/>}
     </Box>
+   }
   </>);
 }

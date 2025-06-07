@@ -33,6 +33,7 @@ export interface IDResponse {
   resultIds: string[];
   next: string;
   total: number;
+  code: number;
 }
 
 export interface Dog {

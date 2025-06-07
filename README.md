@@ -16,3 +16,6 @@ Open a browser and navigate to `localhost:3000`.
 
 ## Running Tests
 To run unit tests, after installing packages run `npm test`.
+
+## Thanks, etc.
+Piper's Playroom Regular font courtesy of Chequered Ink. [Terms can be found here](https://chequered.ink/wp-content/uploads/2024/12/License-Agreement-All-Fonts-Pack.pdf)

@@ -11,6 +11,12 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'PipersPlayroomRegular'
+    ].join(',')
+  }
 });
 
 export default function Root() {
@@ -36,25 +42,32 @@ export default function Root() {
     Logout();
   }
 
+  function onAuthCheck(code: number) {
+    setUserAuth(code === 200);
+  }
+
   return (
     <>
-
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Stack direction='column'>
-        <Header
-         userAuthed={userAuth}
-         onLogout={onLogout}/>
-        {userAuth && (<DogPage/>)}
-        {!userAuth && (
-          <Login
-          nameError={nameError}
-          emailError={emailError}
-          onLoginClicked={onLogin}
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Stack direction='column'>
+          <Header
+           userAuthed={userAuth}
+           onLogout={onLogout}
           />
-        )}
-      </Stack>
-    </ThemeProvider>
+          <DogPage 
+           onAuthCheck={onAuthCheck} 
+           isAuthed={userAuth}
+          />
+          {userAuth === false && (
+            <Login
+             nameError={nameError}
+             emailError={emailError}
+             onLoginClicked={onLogin}
+            />
+          )}
+        </Stack>
+      </ThemeProvider>
     </>
   );
 }

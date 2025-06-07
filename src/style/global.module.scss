@@ -1,0 +1,25 @@
+$font-path: '../../public/fonts';
+@font-face{
+  src: url('#{$font-path}/PipersPlayroomRegular.ttf');
+  font-family: 'PipersPlayroomRegular'
+}
+
+.pipersPlayroom {
+  font-family: 'PipersPlayroomRegular';
+  font-size: xx-large;
+}
+
+.headerStyle {
+  height: 100px;
+  align-content: 'center'; 
+  background-color: rgb(48,0,96);
+}
+
+.pipersRegular {
+  font-family: 'PipersPlayroomRegular';
+  font-size: 'large';
+}
+
+.infoRegular {
+  font-size: '33px'
+}

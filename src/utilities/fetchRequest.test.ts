@@ -4,8 +4,17 @@ import { Authenticate, GetDogBreeds, GetDogs, GetDogsFromIds, GetMatch, Logout }
 const mockIDResponse: IDResponse = {
   resultIds: ['1', '2'],
   next: '25',
-  total: 200
+  total: 200,
+  code: 200
 }
+
+const mockBadResponse: IDResponse = {
+  resultIds: [],
+  next: '0',
+  total: 0,
+  code: 400
+}
+
 
 const mockDogResponse: Dog[] = [
   {
@@ -90,7 +99,7 @@ describe('Fetch Request Library', () => {
   it('Gets a list of dog IDs', () => {
     global.fetch = jest.fn().mockResolvedValue({
       status: 200,
-      json: () => { return mockIDResponse }
+      json: () => { return Promise.resolve(mockIDResponse); }
     });
 
     GetDogs({
@@ -105,7 +114,7 @@ describe('Fetch Request Library', () => {
   it('Handles a bad dog request', () => {
     global.fetch = jest.fn().mockResolvedValue({
       status: 400,
-      json: () => { return mockIDResponse }
+      json: () => { return Promise.resolve(mockIDResponse); }
     });
 
     GetDogs({
@@ -113,7 +122,7 @@ describe('Fetch Request Library', () => {
       ageMax: null,
       ageMin: null
     }).then((result) => {
-      expect(result).toBeUndefined();
+      expect(result).toEqual(mockBadResponse);
     });
   });
 

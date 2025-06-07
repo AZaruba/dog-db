@@ -92,9 +92,22 @@ export async function GetDogs(filter: IDogTableFilter): Promise<IDResponse | und
     }
   ).then((result) => {
     if (result.status != 200) {
-      return undefined;
+      return {
+        resultIds: [],
+        next: '0',
+        total: 0,
+        code: result.status
+      }
     }
-    return result.json();
+
+    return result.json().then((body) => {
+      return {
+        resultIds: body.resultIds,
+        next: body.next,
+        total: body.total,
+        code: 200
+      }
+    });
   }).catch((error) => {
     console.log(error);
     return undefined;

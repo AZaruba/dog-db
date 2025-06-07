@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetDogBreeds } from "../../utilities/fetchRequest";
-import { Box, Button, Container, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Box, Button, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { SortConfig } from "../../constants/types";
 
 export interface IDogSearchProps {
@@ -8,6 +8,7 @@ export interface IDogSearchProps {
   sortConfig?: SortConfig;
   queryCursor: number;
   onDogSearch: (breedList: string[], ageMin: number | null, ageMax: number | null, zipCodes?: string[], resetCursor?: boolean) => void;
+  onViewSelected: (isSelcted: boolean) => void;
 }
 
 export function DogSearch(props: IDogSearchProps) {
@@ -17,6 +18,7 @@ export function DogSearch(props: IDogSearchProps) {
   const [ageMax, setageMax] = useState<number | null>(0);
   const [zipCodes, setZipCodes] = useState<string[]>();
   const [zipCodeError, setZipCodeError] = useState<string>();
+  const [isSelcted, setIsSelected] = useState<boolean>(false);
 
   function onSetZipCode(code: string) {
     const match = /^\d{5,5}$/.exec(code);
@@ -150,6 +152,18 @@ export function DogSearch(props: IDogSearchProps) {
          }}
         >
           Search
+        </Button>
+         <Button
+         loading={props.isLoading}
+         style={{minWidth: 100, height: 40, alignSelf: 'end'}}
+         data-testid='searchButton'
+         variant='outlined'
+         onClick={() => {
+           props.onViewSelected(!isSelcted);
+           setIsSelected(!isSelcted);
+         }}
+        >
+          View Selected
         </Button>
     </Stack>
     </Box>

@@ -1,5 +1,6 @@
 import { Box, Button, Container, Stack, TextField } from "@mui/material";
 import { useState } from "react";
+import { Tutorial } from "../tutorial/tutorial";
 
 export interface ILoginProps {
   nameError: string | undefined;
@@ -13,12 +14,30 @@ export default function Login(props: ILoginProps) {
 
   return (
     <Box
+    padding='16px'
+    display={'flex'}
+    flexDirection={'row'}
+    >
+      <Box 
+      padding='16px'
+      display="flex"
+      justifyContent="center"
+      flexDirection={'column'}
+      alignItems="start"
+      height={'75vh'}
+      width={'50vw'}
+      >
+        <Tutorial/>
+      </Box>
+    
+    <Box
       padding='16px'
       display="flex"
       justifyContent="start"
       flexDirection={'column'}
       alignItems="center"
       height={'75vh'}
+      width={'50vw'}
     >
       <Stack justifyContent={'center'}>
         <TextField
@@ -61,6 +80,7 @@ export default function Login(props: ILoginProps) {
           Login!
         </Button>
       </Stack>
+    </Box>
     </Box>
   );
 }
