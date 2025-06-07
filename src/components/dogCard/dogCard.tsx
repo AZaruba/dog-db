@@ -44,10 +44,12 @@ export function DogCard(props: IDogCardProps) {
             width={'90%'}
           >
             <Stack flexDirection='column' width='70%'>
-              <h1 className={styles.pipersRegular}>{props.dog.name}</h1>
-              <div style={{fontSize: '14px'}}>{props.dog.breed}</div>
-              <div style={{fontSize: '14px'}}>Age: {props.dog.age}</div>
-              <div style={{fontSize: '14px'}}>Location: {props.dog.zip_code}</div>
+              <div className={styles.dogCardName}>
+                <h1 style={{paddingLeft: '8px'}}>{props.dog.name}</h1>
+              </div>
+              <div style={{fontSize: '14px', paddingLeft: '8px'}}>{props.dog.breed}</div>
+              <div style={{fontSize: '14px', paddingLeft: '8px'}}>Age: {props.dog.age}</div>
+              <div style={{fontSize: '14px', paddingLeft: '8px'}}>Location: {props.dog.zip_code}</div>
             </Stack>
             {
               props.selected && (

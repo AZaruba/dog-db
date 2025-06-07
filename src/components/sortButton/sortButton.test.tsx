@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react";
 import { SortButton } from "./sortButton"
 import { SortConfig } from "../../constants/types";
 

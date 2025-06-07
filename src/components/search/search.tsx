@@ -154,19 +154,6 @@ export function DogSearch(props: IDogSearchProps) {
       >
         Search
       </Button>
-        <Button
-        loading={props.isLoading}
-        className={styles.loginButton}
-        style={{minWidth: 150, height: 40, alignSelf: 'end'}}
-        data-testid='searchButton'
-        variant='outlined'
-        onClick={() => {
-          props.onViewSelected(!isSelcted);
-          setIsSelected(!isSelcted);
-        }}
-      >
-        View Selected
-      </Button>
     </Box>
   )
 }

@@ -30,6 +30,13 @@ $font-path: '../../public/fonts';
   border-style: solid;
 }
 
+.dogCardName {
+  font-family: 'PipersPlayroomRegular';
+  font-size: 'large';
+  background-color: rgb(48,0,96) !important;
+  width: 100vh;
+}
+
 .loginButton {
   border-style: solid !important;
   border-radius: 24px !important;
@@ -43,10 +50,16 @@ $font-path: '../../public/fonts';
   color: white !important;
 }
 
+.matchImage {
+  border-radius: 12px !important;
+  border-width: 6px !important;
+  border-style: solid;
+  border-color: rgb(96,0,192) !important;
+}
+
 .secondaryButton {
   width: 140px;
   border-radius: 24px !important;
   background-color: rgb(48,0,96) !important;
   color: white !important;
-
 }
