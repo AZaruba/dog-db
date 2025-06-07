@@ -1,6 +1,7 @@
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SortDir } from "../../constants/types";
+import styles from '../../style/global.module.scss';
 
 export interface ISortBarProps {
   onUpdateSort: (col?: string, dir?: SortDir) => void;
@@ -56,11 +57,11 @@ export function SortBar(props: ISortBarProps) {
       <MenuItem value={'asc'}>Ascending</MenuItem>
       <MenuItem value={'desc'}>Descending</MenuItem>
     </Select>
-    <Button onClick={() => {
+    <Button className={styles.secondaryButton} onClick={() => {
       setSortCol('breed');
       setSortDir('asc');
     }}>
-      Clear Sort
+      Reset Sort
     </Button>
   </Box>
   );

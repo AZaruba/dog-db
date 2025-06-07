@@ -6,12 +6,16 @@ export interface IMatchButtonProps {
   onClick: (id: string) => void;
 }
 export function MatchButton(props: IMatchButtonProps) {
+  const color = props.dogIds.length === 0 ? `rgb(128,128,128)` : `rgb(256,256,256)`;
   return (<Button
    data-testid='match-button'
    disabled={props.dogIds.length === 0}
    style={{
     width: '200px',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginRight: '20%',
+    color: color,
+    borderColor: color
    }}
    variant='outlined'
    onClick={() => {

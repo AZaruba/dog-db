@@ -11,10 +11,13 @@ export interface IDogCardProps {
 
 export function DogCard(props: IDogCardProps) {
   const bgColor = props.selected ? `rgb(128,128,128)` : `rgb(64,64,64)`;
+  const borderColor = props.selected ? `rgb(96,0,192)` : `rgb(48,0,96)`;
   return (
-    <Card>
-      <CardContent style={{padding: 0, width: '200px', }}>
+    <Card className={styles.dogCard} sx={{borderColor: borderColor}}>
+      <CardContent style={{padding: 0, width: '200px'}}>
         <CardActionArea
+          key={`card-click-${props.dog.id}`}
+          data-testid={`card-click-${props.dog.id}`}
           onClick={() => {
             props.onSelected(props.dog.id, !props.selected);
           }}

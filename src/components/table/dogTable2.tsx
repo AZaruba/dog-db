@@ -48,13 +48,14 @@ export function DogTable2(props: IDogTableProps) {
     >
       <Grid container spacing={2} justifyContent={'center'}>
         {
-          splitList.map((list) => {
+          splitList.map((list, index) => {
             return (
-              <Grid container spacing={2}>
+              <Grid container spacing={2} key={`dogs-row-${index}`}>
                 {
                   list.map((dog) => {
                     return (
                       <DogCard
+                       key={`dog-card-${dog.id}`}
                        dog={dog}
                        selected={props.selectedDogs.indexOf(dog.id) > -1}
                        onSelected={props.onDogSelected}

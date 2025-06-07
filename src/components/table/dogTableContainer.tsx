@@ -14,9 +14,13 @@ export interface IDogTableContainerProps {
   onSortUpdate: (col: string, dir: SortDir) => void;
 }
 export function DogTableContainer(props: IDogTableContainerProps) {
-  if (props.isLoading) {
-    return (
-      <Box
+  
+  return (
+    <>
+    { !false ? 
+      (<div style={{paddingBottom: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+        <DogTable2 {...props.tableProps}/>
+      </div>) :<Box
         padding='16px'
         display="flex"
         justifyContent="center"
@@ -25,14 +29,21 @@ export function DogTableContainer(props: IDogTableContainerProps) {
         >
           <div>Loading Dogs...</div>
       </Box>
-    );
-  }
-  
-  return (
-    <div style={{paddingBottom: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-      <DogTable2 {...props.tableProps}/>
-      {props.paginationProps.totalRows > 0 && (<><PaginationControls {...props.paginationProps} />
-      <MatchButton {...props.matchButtonProps} /></>)}
-    </div>
+    }
+      <div style={{
+        paddingBottom: '32px',
+        display: 'flex', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between',
+        position:'sticky',
+        bottom: 0,
+        zIndex: 100,
+        width: '100%',
+        backgroundColor: 'rgb(48,0,96)'
+      }}>
+        {props.paginationProps.totalRows > 0 && (<><PaginationControls {...props.paginationProps} />
+        <MatchButton {...props.matchButtonProps} /></>)}
+      </div>
+    </>
   )
 }

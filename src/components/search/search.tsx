@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GetDogBreeds } from "../../utilities/fetchRequest";
 import { Box, Button, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { SortConfig } from "../../constants/types";
+import styles from '../../style/global.module.scss';
 
 export interface IDogSearchProps {
   isLoading: boolean;
@@ -55,117 +56,117 @@ export function DogSearch(props: IDogSearchProps) {
     <Box
       padding='16px'
       display="flex"
-      justifyContent="start"
-      flexDirection={'column'}
+      gap={'16px'}
+      justifyContent="center"
+      flexDirection={'row'}
       alignItems="center"
-      width={'80vw'}
+      width={'85vw'}
       flexWrap={'wrap'}
     >
-    <Stack direction='row' maxWidth={'md'} gap='20px' justifyItems={'start'} flexWrap={'wrap'}>
-        {breedList && breedList.length > 0 &&
-        <Stack direction='column'>
-          <InputLabel id="breed-select-label">Breed</InputLabel>
-          <Select multiple
-            disabled={props.isLoading}
-            size='small'
-            style={{minWidth: '20vw', maxWidth: '20vw'}}
-            labelId="breed-select-label"
-            id="breed-select"
-            value={selectedBreeds}
-            onChange={(e) => {
-              setSelectedBreeds(e.target.value as string[]);
-            }}
-          >
-            {
-              breedList?.map((breed) => {
-                return <MenuItem value={breed}>{breed}</MenuItem>
-              })
+      {breedList && breedList.length > 0 &&
+      <Stack direction='column'>
+        <InputLabel id="breed-select-label">Breed</InputLabel>
+        <Select multiple
+          disabled={props.isLoading}
+          size='small'
+          style={{minWidth: '20vw', maxWidth: '20vw'}}
+          labelId="breed-select-label"
+          id="breed-select"
+          value={selectedBreeds}
+          onChange={(e) => {
+            setSelectedBreeds(e.target.value as string[]);
+          }}
+        >
+          {
+            breedList?.map((breed) => {
+              return <MenuItem value={breed}>{breed}</MenuItem>
+            })
+          }
+        </Select>
+      </Stack>
+      }
+      <Stack direction='column' >
+        <InputLabel id="min-age-label">Min Age</InputLabel>
+        <TextField
+        disabled={props.isLoading}
+        style={{width: '80px'}}
+        size='small'
+        type='number'
+        id="min-age"
+        value={ageMin}
+        onChange={(e) => {
+          const floor = Math.max(0, e.target.value as unknown as number);
+          setageMin(floor);
+        }}
+        >
+        </TextField>
+      </Stack>
+      <Stack direction='column'>
+        <InputLabel id="max-age-label">Max Age</InputLabel>
+        <TextField
+        disabled={props.isLoading}
+        style={{width: '80px'}}
+        size='small'
+        type='number'
+        id="max-age"
+        value={ageMax}
+        onChange={(e) => {
+          const floor = Math.max(0, e.target.value as unknown as number);
+          setageMax(floor);
+        }}
+        >
+        </TextField>
+      </Stack>
+      <Stack direction='column'>
+        <InputLabel id="zip-code-label">Zip Code</InputLabel>
+          <TextField
+          error={zipCodeError !== undefined}
+          helperText={zipCodeError}
+          disabled={props.isLoading}
+          style={{width: '150px', height: 40, overflowY: 'visible'}}
+          size='small'
+          id="zip-code"
+          onChange={(e) => {
+            if (e.target.value.length > 0) {
+              onSetZipCode(e.target.value);
+            } else {
+              setZipCodes(undefined);
             }
-          </Select>
-        </Stack>
-        }
-
-        <Stack direction='column' >
-          <InputLabel id="min-age-label">Min Age</InputLabel>
-          <TextField
-          disabled={props.isLoading}
-          style={{width: '100px'}}
-          size='small'
-          type='number'
-          id="min-age"
-          value={ageMin}
-          onChange={(e) => {
-            const floor = Math.max(0, e.target.value as unknown as number);
-            setageMin(floor);
           }}
           >
           </TextField>
-        </Stack>
-        <Stack direction='column'>
-          <InputLabel id="max-age-label">Max Age</InputLabel>
-          <TextField
-          disabled={props.isLoading}
-          style={{width: '100px'}}
-          size='small'
-          type='number'
-          id="max-age"
-          value={ageMax}
-          onChange={(e) => {
-            const floor = Math.max(0, e.target.value as unknown as number);
-            setageMax(floor);
-          }}
-          >
-          </TextField>
-        </Stack>
-        <Stack direction='column'>
-          <InputLabel id="zip-code-label">Zip Code</InputLabel>
-            <TextField
-            error={zipCodeError !== undefined}
-            helperText={zipCodeError}
-            disabled={props.isLoading}
-            style={{width: '150px', height: 40, overflowY: 'visible'}}
-            size='small'
-            id="zip-code"
-            onChange={(e) => {
-              if (e.target.value.length > 0) {
-                onSetZipCode(e.target.value);
-              } else {
-                setZipCodes(undefined);
-              }
-            }}
-            >
-            </TextField>
-        </Stack>
+      </Stack>
+      <Button
+        className={styles.loginButton}
+        loading={props.isLoading}
+        style={{minWidth: 100, height: 40, alignSelf: 'end'}}
+        data-testid='searchButton'
+        variant='outlined'
+        onClick={() => {
+          props.onDogSearch(
+          selectedBreeds,
+          ageMin,
+          ageMax,
+          zipCodes,
+          true
+          );
+        }}
+      >
+        Search
+      </Button>
         <Button
-         loading={props.isLoading}
-         style={{minWidth: 100, height: 40, alignSelf: 'end'}}
-         data-testid='searchButton'
-         variant='outlined'
-         onClick={() => {
-           props.onDogSearch(
-            selectedBreeds,
-            ageMin,
-            ageMax,
-            zipCodes,
-            true
-           );
-         }}
-        >
-          Search
-        </Button>
-         <Button
-         loading={props.isLoading}
-         style={{minWidth: 100, height: 40, alignSelf: 'end'}}
-         data-testid='searchButton'
-         variant='outlined'
-         onClick={() => {
-           props.onViewSelected(!isSelcted);
-           setIsSelected(!isSelcted);
-         }}
-        >
-          View Selected
-        </Button>
-    </Stack>
+        loading={props.isLoading}
+        className={styles.loginButton}
+        style={{minWidth: 150, height: 40, alignSelf: 'end'}}
+        data-testid='searchButton'
+        variant='outlined'
+        onClick={() => {
+          props.onViewSelected(!isSelcted);
+          setIsSelected(!isSelcted);
+        }}
+      >
+        View Selected
+      </Button>
     </Box>
   )
 }

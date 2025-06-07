@@ -124,7 +124,6 @@ export function DogPage(props: IDogPageProps) {
     }
   }
 
-  console.log(selectedDogs);
   const matchProps: IMatchButtonProps = {
     dogIds: selectedDogs,
     onClick: function (id: string): void {
@@ -137,12 +136,11 @@ export function DogPage(props: IDogPageProps) {
    {
     props.isAuthed &&
     <Box
-      padding='16px'
       display="flex"
-      justifyContent="start"
+      justifyContent="space-between"
       flexDirection={'column'}
       alignItems="center"
-      height={'75vh'}
+      height={'100%'}
     >
     { !matchDog && 
     <>

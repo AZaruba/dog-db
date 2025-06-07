@@ -11,8 +11,9 @@ export function PaginationControls(props: IPaginationControlsProps) {
   const pageCount = Math.ceil(props.totalRows / props.pageSize);
 
   return (
-  <Stack direction={'row'} justifyContent={'end'} padding='16px' width={'80vw'}>
+  <Stack direction={'row'} justifyContent={'start'} width={'100%'} padding='16px'>
     <Pagination 
+      style={{marginLeft: '20%'}}
       page={props.page + 1}
       count={pageCount} 
       variant="outlined" 

@@ -13,7 +13,7 @@ export function Header(props: IHeaderProps) {
      className={styles.headerStyle}>
       <Stack direction='row' justifyContent={'space-around'} height={'100%'} padding={'16px'} className={styles.pipersPlayroom}>
         <div style={{alignContent: 'center'}}>Play Fetch - A Dog-Matchmaking Service by Andrew Zaruba</div>
-      {props.userAuthed && <Button onClick={props.onLogout}>Logout</Button>}
+      {props.userAuthed && <Button className={styles.logoutButton} onClick={props.onLogout}>Logout</Button>}
       </Stack>
     </Container>
   )
