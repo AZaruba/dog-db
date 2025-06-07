@@ -23,6 +23,7 @@ export function DogPage(props: IDogPageProps) {
   const [selectedDogs, setSelectedDogs] = useState<Record<string, Dog>>({});
   const [sortConfig, setSortConfig] = useState<SortConfig>(DefaultSortConfig);
   const [matchDog, setMatchDog] = useState<Dog>();
+  const [viewingSelectedDogs, setViewingSelectedDogs] = useState<boolean>(false);
 
   useEffect(() => {
      GetDogs({
@@ -90,7 +91,6 @@ export function DogPage(props: IDogPageProps) {
     });
   }
 
-  console.log(selectedDogs);
   function onDogSelected(dog: Dog, isSelected: boolean) {
     const newSelectedDogs = {...selectedDogs};
     if (isSelected) {
@@ -108,10 +108,15 @@ export function DogPage(props: IDogPageProps) {
       dir: dir
     });
   }
+
+  function onViewSelected() {
+    setViewingSelectedDogs(!viewingSelectedDogs);
+  }
   
   const tableProps: IDogTableProps = {
     dogs: dogs,
     selectedDogs: selectedDogs,
+    viewingSelected: viewingSelectedDogs,
     onDogSelected: onDogSelected
   }
 
@@ -151,7 +156,7 @@ export function DogPage(props: IDogPageProps) {
       onDogSearch={onDogSearch}
       onViewSelected={() => {}}
       />
-      <SortBar onUpdateSort={onSortUpdate}/>
+      <SortBar viewingSelected={viewingSelectedDogs} onUpdateSort={onSortUpdate} onViewSelected={onViewSelected}/>
     </>
     }
     { !matchDog && 
@@ -166,6 +171,7 @@ export function DogPage(props: IDogPageProps) {
     { matchDog &&
       <MatchResult dog={matchDog} onStartOver={() => {
         setMatchDog(undefined);
+        setViewingSelectedDogs(false);
         setSelectedDogs({});
       }}/>}
     </Box>

@@ -4,7 +4,9 @@ import { SortDir } from "../../constants/types";
 import styles from '../../style/global.module.scss';
 
 export interface ISortBarProps {
+  viewingSelected: boolean;
   onUpdateSort: (col?: string, dir?: SortDir) => void;
+  onViewSelected: () => void;
 }
 
 const options: Record<string, string> = {
@@ -62,6 +64,11 @@ export function SortBar(props: ISortBarProps) {
       setSortDir('asc');
     }}>
       Reset Sort
+    </Button>
+    <Button className={styles.secondaryButton} style={{width: '200px'}}onClick={() => {
+      props.onViewSelected();
+    }}>
+      View {props.viewingSelected ? 'All' : 'Selected'} Dogs
     </Button>
   </Box>
   );

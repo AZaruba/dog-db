@@ -6,6 +6,7 @@ import { getWindowDimension } from "../../utilities/getWindowDimension";
 export interface IDogTableProps {
   dogs: Dog[];
   selectedDogs: Record<string, Dog>;
+  viewingSelected: boolean;
   sortConfig?: SortConfig;
   onDogSelected: (dog: Dog, isSelected: boolean) => void;
 }
@@ -27,7 +28,24 @@ export function DogTable2(props: IDogTableProps) {
     );
   }
 
-  const splitList: Dog[][] = props.dogs.reduce((splitList: Dog[][], item, index) => { 
+  const dogList = props.viewingSelected ? Object.values(props.selectedDogs) : props.dogs;
+
+  if (dogList.length === 0) {
+    return (
+    <Box
+      padding='16px'
+      display="flex"
+      justifyContent="space-around"
+      flexDirection={'column'}
+      alignItems="center"
+      width={'90vw'}
+    >
+      No Dogs {props.viewingSelected ? 'Selected' : 'Found'}
+    </Box>
+    )
+  }
+
+  const splitList: Dog[][] = dogList.reduce((splitList: Dog[][], item, index) => { 
     const chunkIndex = Math.floor(index/Math.floor((windowWidth*0.8)/200));
     if(!splitList[chunkIndex]) {
       splitList[chunkIndex] = [];
