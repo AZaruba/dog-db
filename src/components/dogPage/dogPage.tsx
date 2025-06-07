@@ -127,7 +127,6 @@ export function DogPage(props: IDogPageProps) {
   const matchProps: IMatchButtonProps = {
     dogIds: selectedDogs,
     onClick: function (id: string): void {
-      console.log("here?");
       setMatchDog(selectedDogs[id]);
     }
   }
