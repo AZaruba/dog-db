@@ -6,7 +6,7 @@ import styles from '../../style/global.module.scss';
 export interface IDogCardProps {
   dog: Dog;
   selected: boolean;
-  onSelected: (id: string, isSelected) => void;
+  onSelected: (dog: Dog, isSelected) => void;
 }
 
 export function DogCard(props: IDogCardProps) {
@@ -19,7 +19,7 @@ export function DogCard(props: IDogCardProps) {
           key={`card-click-${props.dog.id}`}
           data-testid={`card-click-${props.dog.id}`}
           onClick={() => {
-            props.onSelected(props.dog.id, !props.selected);
+            props.onSelected(props.dog, !props.selected);
           }}
           data-active={props.selected}
           sx={{
@@ -33,7 +33,6 @@ export function DogCard(props: IDogCardProps) {
             title={props.dog.name}
           />
           <Box
-            paddingLeft='8px'
             paddingBottom='8px'
             paddingTop='0'
             margin='0'
@@ -55,7 +54,8 @@ export function DogCard(props: IDogCardProps) {
               props.selected && (
                 <FavoriteIcon 
                  fontSize="large"
-                 style={{width: '30%'}}
+                 style={{width: '30%', marginTop: '12px', alignSelf: 'baseline'}}
+                 
                 />
               )
             }

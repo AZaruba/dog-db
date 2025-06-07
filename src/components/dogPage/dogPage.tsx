@@ -20,7 +20,7 @@ export function DogPage(props: IDogPageProps) {
   const [totalDogs, setTotalDogs] = useState<number>(0);
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedDogs, setSelectedDogs] = useState<string[]>([]);
+  const [selectedDogs, setSelectedDogs] = useState<Record<string, Dog>>({});
   const [sortConfig, setSortConfig] = useState<SortConfig>(DefaultSortConfig);
   const [matchDog, setMatchDog] = useState<Dog>();
 
@@ -64,7 +64,6 @@ export function DogPage(props: IDogPageProps) {
     if (resetCursor) {
       from = 0;
       setQueryCursor(0);
-      setSelectedDogs([]);
     }
 
     GetDogs({
@@ -91,12 +90,13 @@ export function DogPage(props: IDogPageProps) {
     });
   }
 
-  function onDogSelected(id: string, isSelected: boolean) {
-    const newSelectedDogs = [...selectedDogs];
+  console.log(selectedDogs);
+  function onDogSelected(dog: Dog, isSelected: boolean) {
+    const newSelectedDogs = {...selectedDogs};
     if (isSelected) {
-      newSelectedDogs.push(id);
+      newSelectedDogs[dog.id] = structuredClone(dog);
     } else {
-      newSelectedDogs.splice(newSelectedDogs.indexOf(id), 1);
+      delete newSelectedDogs[dog.id];
     }
     setSelectedDogs(newSelectedDogs);
   }
@@ -127,7 +127,8 @@ export function DogPage(props: IDogPageProps) {
   const matchProps: IMatchButtonProps = {
     dogIds: selectedDogs,
     onClick: function (id: string): void {
-      setMatchDog(dogs.filter((dog) => dog.id === id)[0]);
+      console.log("here?");
+      setMatchDog(selectedDogs[id]);
     }
   }
   
@@ -166,7 +167,7 @@ export function DogPage(props: IDogPageProps) {
     { matchDog &&
       <MatchResult dog={matchDog} onStartOver={() => {
         setMatchDog(undefined);
-        setSelectedDogs([]);
+        setSelectedDogs({});
       }}/>}
     </Box>
    }

@@ -5,9 +5,9 @@ import { getWindowDimension } from "../../utilities/getWindowDimension";
 
 export interface IDogTableProps {
   dogs: Dog[];
-  selectedDogs: string[];
+  selectedDogs: Record<string, Dog>;
   sortConfig?: SortConfig;
-  onDogSelected: (id: string, isSelected: boolean) => void;
+  onDogSelected: (dog: Dog, isSelected: boolean) => void;
 }
 export function DogTable2(props: IDogTableProps) {
   const windowWidth = getWindowDimension();
@@ -57,7 +57,7 @@ export function DogTable2(props: IDogTableProps) {
                       <DogCard
                        key={`dog-card-${dog.id}`}
                        dog={dog}
-                       selected={props.selectedDogs.indexOf(dog.id) > -1}
+                       selected={Object.keys(props.selectedDogs).indexOf(dog.id) > -1}
                        onSelected={props.onDogSelected}
                       />
                     )

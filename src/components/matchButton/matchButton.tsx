@@ -1,15 +1,16 @@
 import Button from "@mui/material/Button";
 import { GetMatch } from "../../utilities/fetchRequest";
+import { Dog } from "../../constants/types";
 
 export interface IMatchButtonProps {
-  dogIds: string[];
+  dogIds: Record<string, Dog>;
   onClick: (id: string) => void;
 }
 export function MatchButton(props: IMatchButtonProps) {
-  const color = props.dogIds.length === 0 ? `rgb(128,128,128)` : `rgb(256,256,256)`;
+  const color = Object.keys(props.dogIds).length === 0 ? `rgb(128,128,128)` : `rgb(256,256,256)`;
   return (<Button
    data-testid='match-button'
-   disabled={props.dogIds.length === 0}
+   disabled={Object.keys(props.dogIds).length === 0}
    style={{
     width: '200px',
     alignSelf: 'center',
@@ -19,7 +20,7 @@ export function MatchButton(props: IMatchButtonProps) {
    }}
    variant='outlined'
    onClick={() => {
-    GetMatch(props.dogIds).then((matchId) => {
+    GetMatch(Object.keys(props.dogIds)).then((matchId) => {
       props.onClick(matchId);
     });
    }}>
